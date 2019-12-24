@@ -1,0 +1,1 @@
+{"version":3,"sources":["RankList.css"],"names":[],"mappings":"AAAA,gBACI,gBAAiB,CACjB,iBAAkB,CAClB,WAAY,CACZ,aACJ","file":"main.3f51beca.chunk.css","sourcesContent":[".list-item-wrap {\n    border: 1px solid;\n    border-radius: 5px;\n    padding: 5px;\n    margin: 10px 0px;\n}"]}

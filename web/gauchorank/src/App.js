@@ -14,19 +14,21 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <Navbar />
+        <div className="container">
+          <Navbar />
 
-        <Switch>
+          <Switch>
 
-          <Route path="/lists/:id">
-            <ListPage />
-          </Route>
-          
-          <Route path="/">
-            <Index />
-          </Route>
+            <Route path="/lists/:id">
+              <ListPage />
+            </Route>
+            
+            <Route path="/">
+              <Index />
+            </Route>
 
-        </Switch>
+          </Switch>
+        </div>
       </BrowserRouter>
     )
   }
