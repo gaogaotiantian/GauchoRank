@@ -91,13 +91,22 @@ class RankList extends React.Component {
   }
 
   getLists() {
-    this.setState({
-      lists: [
-        {"id": "123", "name": "abca", "optionCount": 3, "activeTime": Date()},
-        {"id": "124", "name": "abda", "optionCount": 4, "activeTime": Date()},
-        {"id": "125", "name": "abfa", "optionCount": 6, "activeTime": Date()},
-        {"id": "126", "name": "abga", "optionCount": 2, "activeTime": Date()}
-      ]
+    fetch ("/api/ranklists").then(res => {
+      if (res.ok) {
+        console.log(res)
+        this.setState({
+          lists: res.json().lists
+        })
+      } else {
+        this.setState({
+          lists: [
+            {"id": "123", "name": "abca", "optionCount": 3, "activeTime": Date()},
+            {"id": "124", "name": "abda", "optionCount": 4, "activeTime": Date()},
+            {"id": "125", "name": "abfa", "optionCount": 6, "activeTime": Date()},
+            {"id": "126", "name": "abga", "optionCount": 2, "activeTime": Date()}
+          ]
+        })
+      }
     })
   }
 
