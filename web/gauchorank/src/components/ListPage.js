@@ -15,6 +15,26 @@ class CandidateInsert extends React.Component {
     })
   }
 
+  addCandidateHandler() {
+    const data = {
+      "name": "test",
+      "uid": 1
+    }
+
+    const options = {
+      "method": "POST",
+      "body": JSON.stringify(data),
+      "headers": {
+        "Content-Type": 'application/json'
+      }
+    }
+
+    fetch(`/api/ranklists/${this.props.listId}/candidates`, options)
+      .then(res => {
+        console.log(res.status)
+      })
+  }
+
   render() {
     if (this.state.insertMode) {
       return (
@@ -28,6 +48,7 @@ class CandidateInsert extends React.Component {
             <div class="col-4">
               <button 
                 className="btn btn-primary"
+                onClick={() => this.addCandidateHandler()}
                 >
                 确定
               </button>
@@ -102,7 +123,9 @@ class CandidateList extends React.Component {
     return (
       <div>
         <div className="py-2">
-          <CandidateInsert/>
+          <CandidateInsert
+            listId={this.props.listId}
+          />
         </div>
         <div>
           {this.props.candidates.map((candidate, idx) => 
@@ -121,36 +144,61 @@ class CandidateList extends React.Component {
 class ListPage extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      "listId": this.props.match.params.id,
+      "listName": "",
+      "listCandidates": []
+    }
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    console.log(this.state)
     this.getListData()
   }
 
   getListData() {
-    this.setState({
-      "listId": this.props.match.params.id,
-      "listName": "Test",
-      "listCandidates": [
-        {
-          "name": "candidate1",
-          "voteUp": 6,
-          "voteDown": 3,
-          "myVote": "none"
-        },
-        {
-          "name": "candidate2",
-          "voteUp": 6,
-          "voteDown": 3,
-          "myVote": "up"
-        },
-        {
-          "name": "candidate3",
-          "voteUp": 6,
-          "voteDown": 3,
-          "myVote": "none"
-        }
-      ]
+    fetch(`/api/ranklists/${this.state.listId}`).then(res => {
+      return res.json()
+    }).then((data) => {
+      this.setState((state) => ({
+        "listName": data.name
+      }))
+    }).catch(e => {
+      this.setState((state) => ({
+        "listName": "test"
+      }))
+    })
+
+    fetch(`/api/ranklists/${this.state.listId}/candidates`).then(res => {
+      return res.json()
+    }).then((data) => {
+      console.log(data)
+      this.setState((state) => ({
+        "listCandidates": data.candidates
+      }))
+    }).catch((e) => {
+      this.setState((state) => ({
+        "listCandidates": [
+          {
+            "name": "candidate1",
+            "voteUp": 6,
+            "voteDown": 3,
+            "myVote": "none"
+          },
+          {
+            "name": "candidate2",
+            "voteUp": 6,
+            "voteDown": 3,
+            "myVote": "up"
+          },
+          {
+            "name": "candidate3",
+            "voteUp": 6,
+            "voteDown": 3,
+            "myVote": "none"
+          }
+        ]
+      }))
     })
   }
 
@@ -195,6 +243,7 @@ class ListPage extends React.Component {
         </div>
         <div>
           <CandidateList 
+            listId={this.state.listId}
             candidates={this.state.listCandidates}
             voteHandler={(idx, vote) => this.voteHandler(idx, vote)}/>
         </div>
