@@ -22,7 +22,7 @@ class CandidateInsert extends React.Component {
     }
 
     const options = {
-      "method": "POST",
+      "method": "PUT",
       "body": JSON.stringify(data),
       "headers": {
         "Content-Type": 'application/json'

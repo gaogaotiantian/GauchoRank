@@ -7,12 +7,35 @@ import {
 class RankListCreate extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      "listTitle": ""
+    }
   }
 
   componentWillMount (){
     this.setState ({
       "createMode": false
     })
+  }
+
+  addListHandler() {
+    const data = {
+      "name": this.state.value,
+      "uid": 1
+    }
+
+    const options = {
+      "method": "PUT",
+      "body": JSON.stringify(data),
+      "headers": {
+        "Content-Type": 'application/json'
+      }
+    }
+
+    fetch(`/api/ranklists`, options)
+      .then(res => {
+        console.log(res.status)
+      })
   }
 
   render() {
@@ -23,11 +46,14 @@ class RankListCreate extends React.Component {
             <input
               className="form-control"
               placeholder="输入投票标题"
+              onChange={(event) => this.setState({value: event.target.value})}
+              value={this.state.value}
             />
           </div>
           <div className="col-4">
             <button
               className="btn btn-primary"
+              onClick={() => this.addListHandler()}
             >
               确定
             </button>
@@ -72,6 +98,9 @@ class RankListItem extends React.Component {
           </div>
           <div>
             <p>{this.props.list.optionCount}个选项</p>
+          </div>
+          <div>
+            <p>{this.props.list.voteCount}个投票</p>
           </div>
           <div className="list-item-footer">
             <span>{`${this.props.list.activeTime.toString()}`}</span>
